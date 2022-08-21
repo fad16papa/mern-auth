@@ -23,7 +23,6 @@ if ((process.env.NODE_ENV = "development")) {
 }
 
 //connect to database
-console.log("Connecting to Database");
 connectDB();
 
 //middlewares
@@ -32,6 +31,6 @@ app.use("/api", authRoutes);
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log(
-    `API is running at port ${port} - $${process.env.NODE_ENV}`.green.underline
+    `API is running at port ${port} - $${process.env.NODE_ENV}`.bgCyan.underline
   );
 });
