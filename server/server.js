@@ -1,23 +1,18 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import colors from "colors";
 
 //import routes
-const authRoutes = require("./routes/auth.js");
-const { connectDB } = "./db.js";
+import authRoutes from "./routes/auth.js";
+import connectDB from "./config/db.js";
 
 dotenv.config();
 
 const app = express();
-
-//connect to database
-connectDB;
-
-//middlewares
-app.use("/api", authRoutes);
 
 //app middlewares
 app.use(morgan("dev"));
@@ -27,7 +22,16 @@ if ((process.env.NODE_ENV = "development")) {
   app.use(cors({ origin: `http://localhost:3000` }));
 }
 
+//connect to database
+console.log("Connecting to Database");
+connectDB();
+
+//middlewares
+app.use("/api", authRoutes);
+
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
-  console.log(`API is running at port ${port} - $${process.env.NODE_ENV}`);
+  console.log(
+    `API is running at port ${port} - $${process.env.NODE_ENV}`.green.underline
+  );
 });
