@@ -3,12 +3,18 @@ const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-require("dotenv").config();
-
-const app = express();
+const dotenv = require("dotenv");
 
 //import routes
 const authRoutes = require("./routes/auth.js");
+const { connectDB } = "./db.js";
+
+dotenv.config();
+
+const app = express();
+
+//connect to database
+connectDB;
 
 //middlewares
 app.use("/api", authRoutes);
@@ -20,12 +26,6 @@ app.use(bodyParser.json());
 if ((process.env.NODE_ENV = "development")) {
   app.use(cors({ origin: `http://localhost:3000` }));
 }
-
-//connect to database
-mongoose
-  .connect(process.env.DATABASE, {})
-  .then(() => console.log("DB Connected"))
-  .catch((err) => console.log("DB Error => ", err));
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
