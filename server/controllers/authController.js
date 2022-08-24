@@ -40,7 +40,7 @@ const signup = asyncHandler(async (req, res) => {
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res.status(400).json({
-        error: "Email is already taken, Kindly use another email.",
+        error: "Email is taken, Please provide another email.",
       });
     }
 
@@ -55,15 +55,15 @@ const signup = asyncHandler(async (req, res) => {
       to: email,
       subject: `Account activation link`,
       html: `<h1>Please use the following link to activate your account</h1>
-      <p>${process.env.CLIENT_URL}</p>
-      <hr />
-      <p>This email may contain sensitive information.</p>
-      <p>${process.env.CLIENT_URL}</p>
-      `,
+        <p>${process.env.CLIENT_URL}</p>
+        <hr />
+        <p>This email may contain sensitive information.</p>
+        <p>${process.env.CLIENT_URL}</p>
+        `,
     };
 
     sendgridMail.send(emailData).then((sent) => {
-      console.log("SIGNUP EMAIL SENT", sent);
+      // console.log("SIGNUP EMAIL SENT", sent);
 
       return res.json({
         message: `Email has been sent to ${email}. Please follow the instruction to activate your account.`,
