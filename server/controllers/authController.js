@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 
 const signup = asyncHandler(async (req, res) => {
+  console.log("REQ BODY ON SIGN UP", req.body);
   res.json({
     data: "you hit the signup endpoint",
   });
