@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
-import { match } from "assert";
 
 const userSchema = new mongoose.Schema(
   {
