@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const crypto = require("crypto");
-const { match } = require("assert");
+import mongoose from "mongoose";
+import crypto from "crypto";
+import { match } from "assert";
 
 const userSchema = new mongoose.Schema(
   {
@@ -69,4 +69,6 @@ userSchema.methods = {
   },
 };
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;
