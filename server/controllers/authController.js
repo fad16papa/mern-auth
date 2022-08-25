@@ -66,13 +66,13 @@ const signup = asyncHandler(async (req, res) => {
     sendgridMail
       .send(emailData)
       .then((sent) => {
-        // console.log('SIGNUP EMAIL SENT', sent)
+        console.log("SIGNUP EMAIL SENT", sent);
         return res.json({
           message: `Email has been sent to ${email}. Follow the instruction to activate your account`,
         });
       })
       .catch((err) => {
-        // console.log("SIGNUP EMAIL SENT ERROR", err);
+        console.log("SIGNUP EMAIL SENT ERROR", err);
         return res.json({
           message: err.message,
         });
