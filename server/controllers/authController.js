@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import sendgridMail from "@sendgrid/mail";
+import { sendEmailWithNodeMailer } from "../helpers/email.js";
 
 //declare sendgrid API KEY
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -63,20 +64,22 @@ const signup = asyncHandler(async (req, res) => {
           `,
     };
 
-    sendgridMail
-      .send(emailData)
-      .then((sent) => {
-        console.log("SIGNUP EMAIL SENT", sent);
-        return res.json({
-          message: `Email has been sent to ${email}. Follow the instruction to activate your account`,
-        });
-      })
-      .catch((err) => {
-        console.log("SIGNUP EMAIL SENT ERROR", err);
-        return res.json({
-          message: err.message,
-        });
-      });
+    sendEmailWithNodeMailer(req, res, emailData);
+
+    // sendgridMail
+    //   .send(emailData)
+    //   .then((sent) => {
+    //     console.log("SIGNUP EMAIL SENT", sent);
+    //     return res.json({
+    //       message: `Email has been sent to ${email}. Follow the instruction to activate your account`,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log("SIGNUP EMAIL SENT ERROR", err);
+    //     return res.json({
+    //       message: err.message,
+    //     });
+    //   });
   });
 });
 
