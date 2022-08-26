@@ -65,22 +65,47 @@ const signup = asyncHandler(async (req, res) => {
     };
 
     sendEmailWithNodeMailer(req, res, emailData);
-
-    // sendgridMail
-    //   .send(emailData)
-    //   .then((sent) => {
-    //     console.log("SIGNUP EMAIL SENT", sent);
-    //     return res.json({
-    //       message: `Email has been sent to ${email}. Follow the instruction to activate your account`,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("SIGNUP EMAIL SENT ERROR", err);
-    //     return res.json({
-    //       message: err.message,
-    //     });
-    //   });
   });
 });
 
-export { signup };
+const accountActivation = asyncHandler(async (req, res) => {
+  let { token } = req.body;
+
+  if (token) {
+    jwt.verify(
+      token,
+      "process.env.JWT_ACCOUNT_ACTIVATION",
+      function (err, decoded) {
+        if (err) {
+          console.log("JWT VERIFY IN ACCOUNT ACTIVIATION ERROR", err);
+          return res.status(401).json({
+            message: "Expired link. Signup Again!",
+          });
+        }
+
+        let { name, email, password } = jwt.decode(token);
+
+        let user = new User({ name, email, password });
+
+        user.save((err, user) => {
+          if (err) {
+            console.log("SAVE USER IN ACCOUNT ACTIVATION ERROR", err);
+            return res.status(401).json({
+              message: "ERROR SAVING USER IN DATABASE, TRY SIGNUP AGAIN!",
+            });
+          }
+
+          return res.json({
+            message: "SIGNUP SUCCESS. PLEASE LOGIN!",
+          });
+        });
+      }
+    );
+  } else {
+    return res.json({
+      message: "SOMETHING WENT WRONG TRY!",
+    });
+  }
+});
+
+export { signup, accountActivation };
