@@ -7,8 +7,8 @@ const sendEmailWithNodeMailer = (req, res, emailData) => {
     secure: false,
     requireTLS: true,
     auth: {
-      user: "fad16papa@gmail.com",
-      pass: "vrfljdzxlicqigvm",
+      user: process.env.EMAIL_FROM,
+      pass: process.env.GMAIL_MAIL_PASSWORD,
     },
     tls: {
       ciphers: "SSLv3",
