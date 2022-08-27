@@ -108,4 +108,33 @@ const accountActivation = asyncHandler(async (req, res) => {
   }
 });
 
-export { signup, accountActivation };
+const singin = asyncHandler(async (req, res) => {
+  let { email, password } = req.body;
+
+  //check if the user exist
+  User.findOne({ email }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User with the email does not exist.",
+      });
+    }
+    //authenticate
+    if (!user.authenticate(password)) {
+      return res.status(400).json({
+        error: "Email and password do not match.",
+      });
+    }
+    //generate a token and send to client
+    let token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    let { _id, name, email, role } = user;
+    return res.json({
+      token,
+      user: { _id, name, email, role },
+    });
+  });
+});
+
+export { signup, accountActivation, singin };
